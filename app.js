@@ -154,14 +154,26 @@ app.get("/reserve", function(req, res) {
 
 //APP.POST
 app.post("/setup", function(req, res) {
-  totalTable = req.body.sizeTableS + req.body.sizeTableM + req.body.sizeTableL;
+  let setupTotalNumber = 0;
+
+  for(let i = 0; i < req.body.sizeTableS; i++){
+    setupTotalNumber++;
+  }
+
+  for(let i = 0; i < req.body.sizeTableM; i++){
+    setupTotalNumber++;
+  }
+
+  for(let i = 0; i < req.body.sizeTableL; i++){
+    setupTotalNumber++;
+  }
 
   const setup = new Setup({
     nameOfRestaurant: req.body.nameOfRestaurant,
     sizeTableS: req.body.sizeTableS,
     sizeTableM: req.body.sizeTableM,
     sizeTableL: req.body.sizeTableL,
-    totalTable: totalTable,
+    totalTable: setupTotalNumber,
     setupComplete: true
   });
 
