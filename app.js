@@ -26,6 +26,7 @@ var setupSchema = new mongoose.Schema({
   sizeTableS: Number,
   sizeTableM: Number,
   sizeTableL: Number,
+  totalTable: Number,
   setupComplete: {
     type: Boolean,
     default: false
@@ -48,9 +49,10 @@ const Reserve = mongoose.model("Reserve", reserveSchema);
 
 //VARIABLES
 let nameOfRestaurant = "";
-let sizeTableS;
-let sizeTableM;
-let sizeTableL;
+let sizeTableS = 0;
+let sizeTableM = 0;
+let sizeTableL = 0;
+let totalTable = 0;
 
 //APP.GET
 app.get("/", function(req, res) {
@@ -66,12 +68,11 @@ app.get("/", function(req, res) {
       // Reserve.collection.drop();
       //getting the name of the restaurant
       nameOfRestaurant = result.nameOfRestaurant;
-      sizeTableS = result.sizeTableS;
-      sizeTableM = result.sizeTableM;
-      sizeTableL = result.sizeTableL;
+      sizeTableS += result.sizeTableS;
+      sizeTableM += result.sizeTableM;
+      sizeTableL += result.sizeTableL;
       totalTable = 1;
 
-      if (sizeTableS > 0) {
         for (let i = 0; i < sizeTableS; i++) {
           const reserve = new Reserve({
             tableNumber: totalTable,
@@ -82,9 +83,7 @@ app.get("/", function(req, res) {
           totalTable += 1;
           reserve.save();
         }
-      }
 
-      if (sizeTableM > 0) {
         for (let i = 0; i < sizeTableM; i++) {
           const reserve = new Reserve({
             tableNumber: totalTable,
@@ -95,9 +94,7 @@ app.get("/", function(req, res) {
           totalTable += 1;
           reserve.save();
         }
-      }
 
-      if (sizeTableL > 0) {
         for (let i = 0; i < sizeTableL; i++) {
           const reserve = new Reserve({
             tableNumber: totalTable,
@@ -108,7 +105,11 @@ app.get("/", function(req, res) {
           totalTable += 1;
           reserve.save();
         }
-      }
+
+
+      //minus'd due to table array count
+      totalTable -= 1;
+
       res.redirect("/reserve");
     }
   });
@@ -121,19 +122,29 @@ app.get("/setup", function(req, res) {
 app.get("/reserve", function(req, res) {
 
   //if havent setup yet then go to /setup
-  Setup.findOne({}, function(err, result) {
+  Setup.findOne({}, function(err, resultSetup) {
     if (err) {
       console.log(err);
     }
-    if (!result) {
+    if (!resultSetup) {
       res.redirect("/setup");
     }
     else{
-      res.render("reserve.ejs", {
-        nameOfRestaurant: nameOfRestaurant,
-        sizeTableS: sizeTableS,
-        sizeTableM: sizeTableM,
-        sizeTableL: sizeTableL
+      Reserve.find({}, function(err, resultReserve){
+        if(err){
+          console.log(err);
+        }
+
+        if(resultReserve){
+          console.log(totalTable);
+          res.render("reserve.ejs", {
+            nameOfRestaurant: nameOfRestaurant,
+            sizeTableS: sizeTableS,
+            sizeTableM: sizeTableM,
+            sizeTableL: sizeTableL,
+            totalTable: resultSetup.totalTable
+          });
+        }
       });
     }
   });
@@ -143,11 +154,14 @@ app.get("/reserve", function(req, res) {
 
 //APP.POST
 app.post("/setup", function(req, res) {
+  totalTable = req.body.sizeTableS + req.body.sizeTableM + req.body.sizeTableL;
+
   const setup = new Setup({
     nameOfRestaurant: req.body.nameOfRestaurant,
     sizeTableS: req.body.sizeTableS,
     sizeTableM: req.body.sizeTableM,
     sizeTableL: req.body.sizeTableL,
+    totalTable: totalTable,
     setupComplete: true
   });
 

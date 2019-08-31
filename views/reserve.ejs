@@ -1,8 +1,22 @@
 <%- include("partials/header"); -%>
-<div class="container">
+<div class="container" id="container">
   <h1>Welcome to <%= nameOfRestaurant %></h1>
 
   <p>Please select the table you want</p>
+
+  <!-- <script type="text/javascript" src="/scripts/reserve.js" charset="utf-8"></script> -->
+  <script type="text/javascript">
+    var pageButtons = $('#container');
+    for (var i = 0; i < <%= totalTable %>; i++) {
+      pageButtons.append('<input type="button" id="button' + 4 + '" value="' + 4 + '"/>');
+    }
+  </script>
+
+  <!-- <script type="text/javascript">
+    console.log( <%= totalTable %> );
+  </script> -->
+
+  <h1><%= totalTable %></h1>
 
 </div>
 <%- include("partials/footer"); -%>
