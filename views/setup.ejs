@@ -1,0 +1,20 @@
+<%- include("partials/header"); -%>
+<div class="container">
+  <h1>Welcome to the application!</h1>
+  <p>
+    Please fill these form for your application to work properly.
+    </p>
+
+    <form class="" action="/setup" method="post">
+      <label>Name of restaurant</label>
+      <input type="text" name="nameOfRestaurant" value="">
+      <label>Number of small tables</label>
+      <input type="number" name="sizeTableS" value="">
+      <label>Number of medium tables</label>
+      <input type="number" name="sizeTableM" value="">
+      <label>Number of large tables</label>
+      <input type="number" name="sizeTableL" value="">
+      <button type="submit" name="button">Enter</button>
+    </form>
+</div>
+<%- include("partials/footer"); -%>

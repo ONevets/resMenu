@@ -1,0 +1,27 @@
+SITUATIONS:
+1. <number of variable> of table - constant for now (10)
+	5 tables - 4 people
+	3 tables - 6 people
+	2 tables - 8 people
+
+2. Another app for the cashier and the customer
+	>TABLE RESERVATION
+	- welcoming screen
+	- what is the desired number of people
+	- pick a seat (seat layout)
+
+	>CUSTOMER
+	- category of menus, menu, price, description, rating, options, total, tax, payment
+	- submit button which interacts with the cashier app
+	- "list of orders" which has the feature to remove
+	- pay first (API)
+	- if alerted sold out or cancelled then send an alert
+	- when alerted, able to send a message to the cashier with a touch keyboard
+
+	>CASHIER
+	- able to cancel and accept orders
+	- options to tell the menu app whether something is sold out
+	- receiving alert message
+
+PROBLEMS:
+1. table reservation
