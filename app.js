@@ -66,6 +66,49 @@ app.get("/", function(req, res) {
       // Reserve.collection.drop();
       //getting the name of the restaurant
       nameOfRestaurant = result.nameOfRestaurant;
+      sizeTableS = result.sizeTableS;
+      sizeTableM = result.sizeTableM;
+      sizeTableL = result.sizeTableL;
+      totalTable = 1;
+
+      if (sizeTableS > 0) {
+        for (let i = 0; i < sizeTableS; i++) {
+          const reserve = new Reserve({
+            tableNumber: totalTable,
+            sizeOfTable: "S",
+            taken: false
+          });
+
+          totalTable += 1;
+          reserve.save();
+        }
+      }
+
+      if (sizeTableM > 0) {
+        for (let i = 0; i < sizeTableM; i++) {
+          const reserve = new Reserve({
+            tableNumber: totalTable,
+            sizeOfTable: "M",
+            taken: false
+          });
+
+          totalTable += 1;
+          reserve.save();
+        }
+      }
+
+      if (sizeTableL > 0) {
+        for (let i = 0; i < sizeTableL; i++) {
+          const reserve = new Reserve({
+            tableNumber: totalTable,
+            sizeOfTable: "L",
+            taken: false
+          });
+
+          totalTable += 1;
+          reserve.save();
+        }
+      }
       res.redirect("/reserve");
     }
   });
@@ -76,59 +119,26 @@ app.get("/setup", function(req, res) {
 });
 
 app.get("/reserve", function(req, res) {
-  Setup.find({
-    setupComplete: true
-  }, function(err, result) {
+
+  //if havent setup yet then go to /setup
+  Setup.findOne({}, function(err, result) {
     if (err) {
       console.log(err);
-    } else {
-      sizeTableS = result.sizeTableS;
-      sizeTableM = result.sizeTableM;
-      sizeTableL = result.sizeTableL;
-      if (sizeTableS > 0) {
-        for (let i = 1; i < sizeTableS; i++) {
-          const reserve = new Reserve({
-            tableNumber: i,
-            sizeOfTable: "S",
-            taken: false
-          });
-
-          reserve.save();
-        }
-      }
-      if (sizeTableM > 0) {
-        for (let i = 1; i <= sizeTableM; i++) {
-          const reserve = new Reserve({
-            tableNumber: i,
-            sizeOfTable: "M",
-            taken: false
-          });
-
-          reserve.save();
-        }
-      }
-
-      if (sizeTableL > 0) {
-        for (let i = 1; i <= sizeTableL; i++) {
-          const reserve = new Reserve({
-            tableNumber: i,
-            sizeOfTable: "L",
-            taken: false
-          });
-
-          reserve.save();
-        }
-      }
-
     }
+    if (!result) {
+      res.redirect("/setup");
+    }
+    else{
+      res.render("reserve.ejs", {
+        nameOfRestaurant: nameOfRestaurant,
+        sizeTableS: sizeTableS,
+        sizeTableM: sizeTableM,
+        sizeTableL: sizeTableL
+      });
+    }
+  });
 
-  });
-  res.render("reserve.ejs", {
-    nameOfRestaurant: nameOfRestaurant,
-    sizeTableS: sizeTableS,
-    sizeTableM: sizeTableM,
-    sizeTableL: sizeTableL
-  });
+
 });
 
 //APP.POST
