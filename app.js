@@ -51,7 +51,6 @@ const Reserve = mongoose.model("Reserve", reserveSchema);
 
 //VARIABLES
 
-let nameOfRestaurant = "";
 let sizeTableS = 0;
 let sizeTableM = 0;
 let sizeTableL = 0;
@@ -77,7 +76,6 @@ app.get("/", function(req, res) {
 
         if (!resultReserve) {
           //getting the name of the restaurant
-          nameOfRestaurant = resultSetup.nameOfRestaurant;
           sizeTableS += resultSetup.sizeTableS;
           sizeTableM += resultSetup.sizeTableM;
           sizeTableL += resultSetup.sizeTableL;
@@ -145,18 +143,36 @@ app.get("/reserve", function(req, res) {
     if (!resultSetup) {
       res.redirect("/setup");
     } else {
+
       Reserve.find({}, function(err, resultReserve) {
+        let arraySizeTableS = [];
+        let arraySizeTableM = [];
+        let arraySizeTableL = [];
+
         if (err) {
           console.log(err);
         }
 
         if (resultReserve) {
-          console.log(totalTable);
+          resultReserve.forEach(function(element){
+            if(element.sizeOfTable === "S"){
+              arraySizeTableS.push(element.sizeOfTable);
+            }
+            else if(element.sizeOfTable === "M"){
+              arraySizeTableM.push(element.sizeOfTable);
+            }
+            else if(element.sizeOfTable === "L"){
+              arraySizeTableL.push(element.sizeOfTable);
+            }
+          });
+          console.log(arraySizeTableL);
+          console.log(arraySizeTableS);
+          console.log(arraySizeTableM);
           res.render("reserve.ejs", {
-            nameOfRestaurant: nameOfRestaurant,
-            sizeTableS: sizeTableS,
-            sizeTableM: sizeTableM,
-            sizeTableL: sizeTableL,
+            nameOfRestaurant: resultSetup.nameOfRestaurant,
+            arraySizeTableS: arraySizeTableS,
+            arraySizeTableM: arraySizeTableM,
+            arraySizeTableL: arraySizeTableL,
             totalTable: resultSetup.totalTable
           });
         }
