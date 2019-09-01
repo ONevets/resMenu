@@ -1,5 +1,7 @@
 //jshint esversion: 6
 
+//REQUIREMENTS
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -48,6 +50,7 @@ const Setup = mongoose.model("Setup", setupSchema);
 const Reserve = mongoose.model("Reserve", reserveSchema);
 
 //VARIABLES
+
 let nameOfRestaurant = "";
 let sizeTableS = 0;
 let sizeTableM = 0;
@@ -55,67 +58,80 @@ let sizeTableL = 0;
 let totalTable = 0;
 
 //APP.GET
+
 app.get("/", function(req, res) {
   Setup.findOne({
     setupComplete: true
-  }, function(err, result) {
+  }, function(err, resultSetup) {
     if (err) {
       console.log(err);
     }
-    if (!result) {
+    if (!resultSetup) {
       res.redirect("/setup");
     } else {
       // Reserve.collection.drop();
-      //getting the name of the restaurant
-      nameOfRestaurant = result.nameOfRestaurant;
-      sizeTableS += result.sizeTableS;
-      sizeTableM += result.sizeTableM;
-      sizeTableL += result.sizeTableL;
-      totalTable = 1;
-
-        for (let i = 0; i < sizeTableS; i++) {
-          const reserve = new Reserve({
-            tableNumber: totalTable,
-            sizeOfTable: "S",
-            taken: false
-          });
-
-          totalTable += 1;
-          reserve.save();
+      Reserve.findOne({}, function(err, resultReserve) {
+        if (err) {
+          console.log(err);
         }
 
-        for (let i = 0; i < sizeTableM; i++) {
-          const reserve = new Reserve({
-            tableNumber: totalTable,
-            sizeOfTable: "M",
-            taken: false
-          });
+        if (!resultReserve) {
+          //getting the name of the restaurant
+          nameOfRestaurant = resultSetup.nameOfRestaurant;
+          sizeTableS += resultSetup.sizeTableS;
+          sizeTableM += resultSetup.sizeTableM;
+          sizeTableL += resultSetup.sizeTableL;
+          totalTable = 1;
 
-          totalTable += 1;
-          reserve.save();
+          for (let i = 0; i < sizeTableS; i++) {
+            const reserve = new Reserve({
+              tableNumber: totalTable,
+              sizeOfTable: "S",
+              taken: false
+            });
+
+            totalTable += 1;
+            reserve.save();
+          }
+
+          for (let i = 0; i < sizeTableM; i++) {
+            const reserve = new Reserve({
+              tableNumber: totalTable,
+              sizeOfTable: "M",
+              taken: false
+            });
+
+            totalTable += 1;
+            reserve.save();
+          }
+
+          for (let i = 0; i < sizeTableL; i++) {
+            const reserve = new Reserve({
+              tableNumber: totalTable,
+              sizeOfTable: "L",
+              taken: false
+            });
+
+            totalTable += 1;
+            reserve.save();
+          }
+
+          //minus'd due to table array count
+          totalTable -= 1;
+          res.redirect("/reserve");
+
+        } else {
+          res.redirect("/reserve");
         }
 
-        for (let i = 0; i < sizeTableL; i++) {
-          const reserve = new Reserve({
-            tableNumber: totalTable,
-            sizeOfTable: "L",
-            taken: false
-          });
 
-          totalTable += 1;
-          reserve.save();
-        }
-
-
-      //minus'd due to table array count
-      totalTable -= 1;
-
-      res.redirect("/reserve");
+      });
     }
   });
 });
 
 app.get("/setup", function(req, res) {
+  Setup.collection.drop();
   res.render("setup.ejs");
 });
 
@@ -128,14 +144,13 @@ app.get("/reserve", function(req, res) {
     }
     if (!resultSetup) {
       res.redirect("/setup");
-    }
-    else{
-      Reserve.find({}, function(err, resultReserve){
-        if(err){
+    } else {
+      Reserve.find({}, function(err, resultReserve) {
+        if (err) {
           console.log(err);
         }
 
-        if(resultReserve){
+        if (resultReserve) {
           console.log(totalTable);
           res.render("reserve.ejs", {
             nameOfRestaurant: nameOfRestaurant,
@@ -156,15 +171,15 @@ app.get("/reserve", function(req, res) {
 app.post("/setup", function(req, res) {
   let setupTotalNumber = 0;
 
-  for(let i = 0; i < req.body.sizeTableS; i++){
+  for (let i = 0; i < req.body.sizeTableS; i++) {
     setupTotalNumber++;
   }
 
-  for(let i = 0; i < req.body.sizeTableM; i++){
+  for (let i = 0; i < req.body.sizeTableM; i++) {
     setupTotalNumber++;
   }
 
-  for(let i = 0; i < req.body.sizeTableL; i++){
+  for (let i = 0; i < req.body.sizeTableL; i++) {
     setupTotalNumber++;
   }
 
