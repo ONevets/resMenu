@@ -5,23 +5,28 @@
 
   <p>Please select the table you want</p>
 
+  <form class="" action="/booked" method="post">
+    <script type="text/javascript">
+      var pageButtons = $('#container');
 
-  <script type="text/javascript">
-    var pageButtons = $('#container');
-    for (var i = 0; i < <%= arraySizeTableS.length %>; i++) {
-      pageButtons.append('<input type="button" id="button" value="' + "S" + '"/>');
-    }
+        for (var i = 0; i < <%= arraySizeTableS.length %>; i++) {
+          pageButtons.append('<button type="submit" name="button">' + 'S'+ '</button>');
+        }
 
-    for (var i = 0; i < <%= arraySizeTableM.length %>; i++) {
-      pageButtons.append('<input type="button" id="button" value="' + "M" + '"/>');
-    }
+        for (var i = 0; i < <%= arraySizeTableM.length %>; i++) {
+          pageButtons.append('<button type="submit" name="button">' + 'M' + '</button>');
+        }
 
-    for (var i = 0; i < <%= arraySizeTableL.length %>; i++) {
-      pageButtons.append('<input type="button" id="button" value="' + "L" + '"/>');
-    }
-  </script>
+        for (var i = 0; i < <%= arraySizeTableL.length %>; i++) {
+          pageButtons.append('<button type="submit" name="button">' + 'L' + '</button>');
+        }
+
+    </script>
+  </form>
+
 
   <h1><%= totalTable %></h1>
+  <h1><%= arraySizeTableL%></h1>
 
 </div>
 
