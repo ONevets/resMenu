@@ -25,3 +25,9 @@ SITUATIONS:
 
 PROBLEMS:
 1. table reservation
+
+
+
+NOTE PROBLEMS
+1. how to identify the NUMBERS from mongoose by buttons
+- Setup.findOne.... to find numbers USE VALUE!

@@ -209,15 +209,24 @@ app.route("/reserve")
     });
   });
 
-  // app.post("/reserve", function(req,res){
-  // });
-  
+//booking the place
 app.route("/booked")
   .get(function(req,res){
     res.render("booked.ejs");
+  })
+  .post(function(req,res){
+    console.log(req.body);
+    tableNumber = parseInt(req.body.button);
+    console.log(tableNumber);
+    Reserve.updateOne({tableNumber: tableNumber }, {$set: {taken: true} }, function(err){
+      if(err){
+        console.log(err);
+      } else{
+        console.log("Updated");
+      }
+    });
+    res.redirect("/booked");
   });
-
-
 
 
 //APP.LISTEN

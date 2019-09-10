@@ -5,25 +5,33 @@
 
   <p>Please select the table you want</p>
 
-  <form class="" action="/booked" method="post">
+
+  <form class="" action="/booked" method="post" id="myForm">
+    <div class="container" id="myFormContainer">
+
+    </div>
+
     <script type="text/javascript">
-      var pageButtons = $('#container');
+      var pageButtons = $('#myFormContainer');
+      var tableNumber = 1;
 
-        for (var i = 0; i < <%= arraySizeTableS.length %>; i++) {
-          pageButtons.append('<button type="submit" name="button">' + 'S'+ '</button>');
-        }
+      for (var i = 0; i < <%= arraySizeTableS.length %> ; i++) {
+        pageButtons.append("<button type='submit' name='button' value='" + tableNumber + "'> S </button>");
+        tableNumber++;
+      }
 
-        for (var i = 0; i < <%= arraySizeTableM.length %>; i++) {
-          pageButtons.append('<button type="submit" name="button">' + 'M' + '</button>');
-        }
+      for (var i = 0; i < <%= arraySizeTableM.length %> ; i++) {
+        pageButtons.append("<button type='submit' name='button' value='" + tableNumber + "'> M </button>");
+        tableNumber++;
+      }
 
-        for (var i = 0; i < <%= arraySizeTableL.length %>; i++) {
-          pageButtons.append('<button type="submit" name="button">' + 'L' + '</button>');
-        }
+      for (var i = 0; i < <%= arraySizeTableL.length %> ; i++) {
+        pageButtons.append("<button type='submit' name='button' value='" + tableNumber + "'> L </button>");
+        tableNumber++;
+      }
 
     </script>
   </form>
-
 
   <h1><%= totalTable %></h1>
   <h1><%= arraySizeTableL%></h1>
