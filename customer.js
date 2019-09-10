@@ -23,38 +23,14 @@ app.use(express.static("public"));
 
 //SCHEMAS
 
-var setupSchema = new mongoose.Schema({
-  nameOfRestaurant: String,
-  sizeTableS: Number,
-  sizeTableM: Number,
-  sizeTableL: Number,
-  totalTable: Number,
-  setupComplete: {
-    type: Boolean,
-    default: false
-  }
-});
-
-var reserveSchema = new mongoose.Schema({
+var tableSetupSchema = new mongoose.Schema({
   tableNumber: Number,
-  sizeOfTable: String,
-  taken: {
-    type: Boolean,
-    default: false
-  }
+  setupComplete: {default: false}
 });
 
 //MODELS
 
-const Setup = mongoose.model("Setup", setupSchema);
-const Reserve = mongoose.model("Reserve", reserveSchema);
-
-//VARIABLES
-
-let sizeTableS = 0;
-let sizeTableM = 0;
-let sizeTableL = 0;
-let totalTable = 0;
+const tableSetup = mongoose.model("tableSetup", tableSetupSchema);
 
 //APP.ROUTE
 app.route("/")
@@ -218,16 +194,30 @@ app.route("/booked")
     console.log(req.body);
     tableNumber = parseInt(req.body.button);
     console.log(tableNumber);
-    Reserve.updateOne({tableNumber: tableNumber }, {$set: {taken: true} }, function(err){
+    Reserve.findOne({tableNumber: tableNumber}, function(err, foundTable){
       if(err){
         console.log(err);
+      }
+      if(foundTable.taken === true){
+        res.redirect("/taken");
       } else{
-        console.log("Updated");
+        Reserve.updateOne({tableNumber: tableNumber }, {$set: {taken: true} }, function(err){
+          if(err){
+            console.log(err);
+          } else{
+            console.log("Updated");
+          }
+        });
+        res.redirect("/booked");
       }
     });
-    res.redirect("/booked");
+
   });
 
+app.route("/taken")
+  .get(function(req,res){
+    res.render("taken.ejs");
+  });
 
 //APP.LISTEN
 app.listen(3000, function() {

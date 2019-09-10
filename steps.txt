@@ -1,14 +1,14 @@
 SITUATIONS:
-1. <number of variable> of table - constant for now (10)
-	5 tables - 4 people
-	3 tables - 6 people
-	2 tables - 8 people
+1. <number of variable> of table - constant for now (10) V
+	5 tables - 4 people V
+	3 tables - 6 people V
+	2 tables - 8 people V
 
 2. Another app for the cashier and the customer
 	>TABLE RESERVATION
-	- welcoming screen
-	- what is the desired number of people
-	- pick a seat (seat layout)
+	- welcoming screen V
+	- what is the desired number of people V
+	- pick a seat (seat layout) V
 
 	>CUSTOMER
 	- category of menus, menu, price, description, rating, options, total, tax, payment
@@ -23,8 +23,15 @@ SITUATIONS:
 	- options to tell the menu app whether something is sold out
 	- receiving alert message
 
+	>ADMIN
+	- able to setup
+	- able to change tables
+	- able to add and remove menus
+	- able to manage everything
+
 PROBLEMS:
-1. table reservation
+1. table reservation V
+
 
 
 
