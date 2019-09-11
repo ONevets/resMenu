@@ -1,4 +1,22 @@
 <%- include("partials/header"); -%>
-<h1></h1>
+<h1>It seems that this is your first time setting up!</h1>
+
+<h3>Please enter the number the device is currently at</h3>
+
+<p>The device is currently at table: </p>
+<form class="" action="/setup" method="post">
+  <select name="tableNumber" id="mySelection">
+    <script type="text/javascript">
+      var dropDown = $('#mySelection');
+
+      for (var i = 1; i < <%= totalTable %> + 1; i++) {
+        dropDown.append('<option value="' + i + '">' + i + '</option>');
+      }
+    </script>
+
+  </select>
+  <input type="submit" name="button" value="OK">
+
+</form>
 
 <%- include("partials/footer"); -%>
